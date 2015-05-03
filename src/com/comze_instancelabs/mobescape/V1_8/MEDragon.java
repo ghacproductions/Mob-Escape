@@ -1,18 +1,17 @@
-package com.comze_instancelabs.mobescape.V1_7._8;
+package com.comze_instancelabs.mobescape.V1_8;
 
 import java.util.ArrayList;
 
-import net.minecraft.server.v1_7_R3.DamageSource;
-import net.minecraft.server.v1_7_R3.EntityComplexPart;
-import net.minecraft.server.v1_7_R3.EntityWither;
-import net.minecraft.server.v1_7_R3.World;
+import net.minecraft.server.v1_8_R1.DamageSource;
+import net.minecraft.server.v1_8_R1.EntityComplexPart;
+import net.minecraft.server.v1_8_R1.World;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import com.comze_instancelabs.mobescape.Main;
 
-public class MEWither extends EntityWither {
+public class MEDragon extends net.minecraft.server.v1_8_R1.EntityEnderDragon {
 
 	private boolean onGround = false;
 	private ArrayList<Vector> points = new ArrayList();
@@ -23,7 +22,7 @@ public class MEWither extends EntityWither {
 	private Main m;
 	private String arena;
 	
-	public MEWither(Main m, String arena, Location loc, World world, ArrayList<Vector> p) {
+	public MEDragon(Main m, String arena, Location loc, World world, ArrayList<Vector> p) {
 		super(world);
 		this.m = m;
 		this.arena = arena;
@@ -58,7 +57,6 @@ public class MEWither extends EntityWither {
 		this.Z = (Math.abs(disZ) / tick);
 	}
 
-	@Override
 	public void e() {
 		return;
 	}
@@ -133,15 +131,15 @@ public class MEWither extends EntityWither {
 			
 			if (this.locX <= points.get(currentid).getX()) {
 				if (this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
 				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 270F;
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
 				}
 			} else { // (this.locX > points.get(currentid).getX())
 				if (this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
 				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 180F;
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
 				}
 			}
 
@@ -149,15 +147,15 @@ public class MEWither extends EntityWither {
 
 		if (this.locX <= points.get(currentid).getX()) {
 			if (this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
 			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
 			}
 		} else { // (this.locX > points.get(currentid).getX())
 			if (this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
 			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 180F;
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
 			}
 		}
 		

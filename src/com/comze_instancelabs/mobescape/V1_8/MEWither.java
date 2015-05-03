@@ -1,11 +1,11 @@
-package com.comze_instancelabs.mobescape.V1_7;
+package com.comze_instancelabs.mobescape.V1_8;
 
 import java.util.ArrayList;
 
-import net.minecraft.server.v1_7_R1.DamageSource;
-import net.minecraft.server.v1_7_R1.EntityComplexPart;
-import net.minecraft.server.v1_7_R1.EntityWither;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_8_R1.DamageSource;
+import net.minecraft.server.v1_8_R1.EntityComplexPart;
+import net.minecraft.server.v1_8_R1.EntityWither;
+import net.minecraft.server.v1_8_R1.World;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -58,7 +58,6 @@ public class MEWither extends EntityWither {
 		this.Z = (Math.abs(disZ) / tick);
 	}
 
-	@Override
 	public void e() {
 		return;
 	}

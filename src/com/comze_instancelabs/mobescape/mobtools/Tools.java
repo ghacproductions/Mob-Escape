@@ -17,16 +17,8 @@ import org.bukkit.util.Vector;
 import com.comze_instancelabs.mobescape.AbstractDragon;
 import com.comze_instancelabs.mobescape.AbstractWither;
 import com.comze_instancelabs.mobescape.Main;
-import com.comze_instancelabs.mobescape.V1_6.V1_6Dragon;
-import com.comze_instancelabs.mobescape.V1_6.V1_6Wither;
-import com.comze_instancelabs.mobescape.V1_7.V1_7Dragon;
-import com.comze_instancelabs.mobescape.V1_7.V1_7Wither;
-import com.comze_instancelabs.mobescape.V1_7._10.V1_7_10Dragon;
-import com.comze_instancelabs.mobescape.V1_7._10.V1_7_10Wither;
-import com.comze_instancelabs.mobescape.V1_7._5.V1_7_5Dragon;
-import com.comze_instancelabs.mobescape.V1_7._5.V1_7_5Wither;
-import com.comze_instancelabs.mobescape.V1_7._8.V1_7_8Dragon;
-import com.comze_instancelabs.mobescape.V1_7._8.V1_7_8Wither;
+import com.comze_instancelabs.mobescape.V1_8.V1_8Dragon;
+import com.comze_instancelabs.mobescape.V1_8.V1_8Wither;
 
 public class Tools {
 
@@ -40,39 +32,11 @@ public class Tools {
 		}
 
 		if (type.equalsIgnoreCase("dragon")) {
-			if (m.mode1_6) {
-				V1_6Dragon v = new V1_6Dragon();
+				V1_8Dragon v = new V1_8Dragon();
 				v.removeEnderdragon(arena);
-			} else if (m.mode1_7_5) {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				v.removeEnderdragon(arena);
-			} else if (m.mode1_7_8) {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				v.removeEnderdragon(arena);
-			} else if (m.mode1_7_10) {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				v.removeEnderdragon(arena);
-			} else {
-				V1_7Dragon v = new V1_7Dragon();
-				v.removeEnderdragon(arena);
-			}
 		} else if (type.equalsIgnoreCase("wither")) {
-			if (m.mode1_6) {
-				V1_6Wither v = new V1_6Wither();
+				V1_8Wither v = new V1_8Wither();
 				v.removeWither(arena);
-			} else if (m.mode1_7_5) {
-				V1_7_5Wither v = new V1_7_5Wither();
-				v.removeWither(arena);
-			} else if (m.mode1_7_8) {
-				V1_7_8Wither v = new V1_7_8Wither();
-				v.removeWither(arena);
-			} else if (m.mode1_7_10) {
-				V1_7_10Wither v = new V1_7_10Wither();
-				v.removeWither(arena);
-			} else {
-				V1_7Wither v = new V1_7Wither();
-				v.removeWither(arena);
-			}
 		}
 
 		m.dragon_move_increment.put(arena, 0.0D);
@@ -141,22 +105,9 @@ public class Tools {
 
 					AbstractDragon ad_ = null;
 
-					if (m.mode1_6) {
-						final V1_6Dragon v = new V1_6Dragon();
+
+						final V1_8Dragon v = new V1_8Dragon();
 						ad_ = v;
-					} else if (m.mode1_7_5) {
-						final V1_7_5Dragon v = new V1_7_5Dragon();
-						ad_ = v;
-					} else if (m.mode1_7_8) {
-						final V1_7_8Dragon v = new V1_7_8Dragon();
-						ad_ = v;
-					} else if (m.mode1_7_10) {
-						final V1_7_10Dragon v = new V1_7_10Dragon();
-						ad_ = v;
-					} else {
-						final V1_7Dragon v = new V1_7Dragon();
-						ad_ = v;
-					}
 
 					final AbstractDragon ad = ad_;
 
@@ -179,22 +130,8 @@ public class Tools {
 
 					AbstractWither aw_ = null;
 
-					if (m.mode1_6) {
-						final V1_6Wither v = new V1_6Wither();
+						final V1_8Wither v = new V1_8Wither();
 						aw_ = v;
-					} else if (m.mode1_7_5) {
-						final V1_7_5Wither v = new V1_7_5Wither();
-						aw_ = v;
-					} else if (m.mode1_7_8) {
-						final V1_7_8Wither v = new V1_7_8Wither();
-						aw_ = v;
-					} else if (m.mode1_7_10) {
-						final V1_7_10Wither v = new V1_7_10Wither();
-						aw_ = v;
-					} else {
-						final V1_7Wither v = new V1_7Wither();
-						aw_ = v;
-					}
 
 					final AbstractWither aw = aw_;
 

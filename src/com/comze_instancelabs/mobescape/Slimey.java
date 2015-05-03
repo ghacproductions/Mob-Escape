@@ -2,23 +2,17 @@ package com.comze_instancelabs.mobescape;
 
 import java.util.ArrayList;
 
-import net.minecraft.server.v1_7_R1.DamageSource;
-import net.minecraft.server.v1_7_R1.EntityBat;
-import net.minecraft.server.v1_7_R1.EntityComplexPart;
-import net.minecraft.server.v1_7_R1.EntityEnderDragon;
-import net.minecraft.server.v1_7_R1.EntitySlime;
-import net.minecraft.server.v1_7_R1.ItemStack;
-import net.minecraft.server.v1_7_R1.MathHelper;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_8_R1.DamageSource;
+import net.minecraft.server.v1_8_R1.EntityComplexPart;
+import net.minecraft.server.v1_8_R1.World;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class Slimey extends EntitySlime {
+public class Slimey extends net.minecraft.server.v1_8_R1.EntitySlime {
 
 	private boolean onGround = false;
 	private ArrayList<Vector> points = new ArrayList();
@@ -51,7 +45,6 @@ public class Slimey extends EntitySlime {
 		}
 	}
 
-	@Override
 	public void e() {
 		return;
 	}

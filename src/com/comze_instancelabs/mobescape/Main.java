@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -68,16 +69,8 @@ import org.bukkit.util.Vector;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
-import com.comze_instancelabs.mobescape.V1_6.V1_6Dragon;
-import com.comze_instancelabs.mobescape.V1_6.V1_6Wither;
-import com.comze_instancelabs.mobescape.V1_7.V1_7Dragon;
-import com.comze_instancelabs.mobescape.V1_7.V1_7Wither;
-import com.comze_instancelabs.mobescape.V1_7._10.V1_7_10Dragon;
-import com.comze_instancelabs.mobescape.V1_7._10.V1_7_10Wither;
-import com.comze_instancelabs.mobescape.V1_7._5.V1_7_5Dragon;
-import com.comze_instancelabs.mobescape.V1_7._5.V1_7_5Wither;
-import com.comze_instancelabs.mobescape.V1_7._8.V1_7_8Dragon;
-import com.comze_instancelabs.mobescape.V1_7._8.V1_7_8Wither;
+import com.comze_instancelabs.mobescape.V1_8.V1_8Dragon;
+import com.comze_instancelabs.mobescape.V1_8.V1_8Wither;
 
 public class Main extends JavaPlugin implements Listener {
 
@@ -159,6 +152,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static boolean mode1_7_5 = false;
 	public static boolean mode1_7_8 = false;
 	public static boolean mode1_7_10 = false;
+	public static boolean mode1_8 = false;	
 	public int destroy_radius = 10;
 	public boolean last_man_standing = true;
 	public boolean spawn_winnerfirework = true;
@@ -213,21 +207,13 @@ public class Main extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 		String version = Bukkit.getServer().getClass().getPackage().getName().substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf(".") + 1);
 
-		if (version.contains("1_6_R3")) {
-			mode1_6 = true;
-			getLogger().info("Turned on 1.6.4 mode.");
-		} else if (version.contains("1_7_R1")) {
-			// default
-			getLogger().info("Turned on 1.7.2 mode.");
-		} else if (version.contains("1_7_R2")) {
-			mode1_7_5 = true;
-			getLogger().info("Turned on 1.7.5 mode.");
-		} else if (version.contains("1_7_R3")) {
-			mode1_7_8 = true;
-			getLogger().info("Turned on 1.7.8 mode.");
-		} else if (version.contains("1_7_R4")) {
-			mode1_7_10 = true;
-			getLogger().info("Turned on 1.7.10 mode.");
+		if (version.contains("1_8_R1")) {
+			mode1_8 = true;
+			getLogger().info("Turned on 1.8 mode.");
+		} else {
+			getLogger().severe("Only 1.8 is supported! Disabling!");
+			this.getServer().getPluginManager().disablePlugin(this);
+			return;
 		}
 		registerEntities();
 
@@ -1003,16 +989,7 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	private boolean registerEntities() {
-		if (mode1_6) {
-			return V1_6Dragon.registerEntities();
-		} else if (mode1_7_5) {
-			return V1_7_5Dragon.registerEntities();
-		} else if (mode1_7_8) {
-			return V1_7_8Dragon.registerEntities();
-		} else if (mode1_7_10) {
-			return V1_7_10Dragon.registerEntities();
-		}
-		return V1_7Dragon.registerEntities();
+		return V1_8Dragon.registerEntities();
 	}
 
 	public ArrayList<String> left_players = new ArrayList<String>();
@@ -1142,7 +1119,6 @@ public class Main extends JavaPlugin implements Listener {
 					final float c = p.getLocation().getPitch();
 					final String arena = arenap.get(event.getPlayer());
 					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-						@Override
 						public void run() {
 							try {
 								p.setAllowFlight(true);
@@ -1735,59 +1711,14 @@ public class Main extends JavaPlugin implements Listener {
 	final public HashMap<String, Double> dragon_move_increment = new HashMap<String, Double>();
 
 	public BukkitTask start(final String arena) {
-		if (mode1_6) {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_6Dragon v = new V1_6Dragon();
-				return v.start(this, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_6Wither v = new V1_6Wither();
-				return v.start(this, arena);
-			} else {
-				V1_6Dragon v = new V1_6Dragon();
-				return v.start(this, arena);
-			}
-		} else if (mode1_7_5) {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				return v.start(this, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_7_5Wither v = new V1_7_5Wither();
-				return v.start(this, arena);
-			} else {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				return v.start(this, arena);
-			}
-		} else if (mode1_7_8) {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				return v.start(this, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_7_8Wither v = new V1_7_8Wither();
-				return v.start(this, arena);
-			} else {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				return v.start(this, arena);
-			}
-		} else if (mode1_7_10) {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				return v.start(this, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_7_10Wither v = new V1_7_10Wither();
-				return v.start(this, arena);
-			} else {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				return v.start(this, arena);
-			}
-		}
 		if (type.equalsIgnoreCase("dragon")) {
-			V1_7Dragon v_ = new V1_7Dragon();
+			V1_8Dragon v_ = new V1_8Dragon();
 			return v_.start(this, arena);
 		} else if (type.equalsIgnoreCase("wither")) {
-			V1_7Wither v_ = new V1_7Wither();
+			V1_8Wither v_ = new V1_8Wither();
 			return v_.start(this, arena);
 		} else {
-			V1_7Dragon v_ = new V1_7Dragon();
+			V1_8Dragon v_ = new V1_8Dragon();
 			return v_.start(this, arena);
 		}
 
@@ -1803,62 +1734,16 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	public void stop(BukkitTask t, final String arena) {
-		if (mode1_6) {
 			if (type.equalsIgnoreCase("dragon")) {
-				V1_6Dragon v = new V1_6Dragon();
+				V1_8Dragon v = new V1_8Dragon();
 				v.stop(this, t, arena);
 			} else if (type.equalsIgnoreCase("wither")) {
-				V1_6Wither v = new V1_6Wither();
+				V1_8Wither v = new V1_8Wither();
 				v.stop(this, t, arena);
 			} else {
-				V1_6Dragon v = new V1_6Dragon();
+				V1_8Dragon v = new V1_8Dragon();
 				v.stop(this, t, arena);
 			}
-		} else if (mode1_7_5) {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				v.stop(this, t, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_7_5Wither v = new V1_7_5Wither();
-				v.stop(this, t, arena);
-			} else {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				v.stop(this, t, arena);
-			}
-		} else if (mode1_7_8) {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				v.stop(this, t, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_7_8Wither v = new V1_7_8Wither();
-				v.stop(this, t, arena);
-			} else {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				v.stop(this, t, arena);
-			}
-		} else if (mode1_7_10) {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				v.stop(this, t, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_7_10Wither v = new V1_7_10Wither();
-				v.stop(this, t, arena);
-			} else {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				v.stop(this, t, arena);
-			}
-		}  else {
-			if (type.equalsIgnoreCase("dragon")) {
-				V1_7Dragon v = new V1_7Dragon();
-				v.stop(this, t, arena);
-			} else if (type.equalsIgnoreCase("wither")) {
-				V1_7Wither v = new V1_7Wither();
-				v.stop(this, t, arena);
-			} else {
-				V1_7Dragon v = new V1_7Dragon();
-				v.stop(this, t, arena);
-			}
-		}
 
 		if (m.lobby_countdown_id.containsKey(arena)) {
 			try {
@@ -2233,17 +2118,8 @@ public class Main extends JavaPlugin implements Listener {
 		playBlockBreakParticles(loc, m, Bukkit.getOnlinePlayers());
 	}
 
-	public static final void playBlockBreakParticles(final Location loc, final Material m, final Player... players) {
-		if (mode1_6) {
-			(new V1_6Dragon()).playBlockBreakParticles(loc, m, players);
-		} else if (mode1_7_5) {
-			(new V1_7_5Dragon()).playBlockBreakParticles(loc, m, players);
-		} else if (mode1_7_8) {
-			(new V1_7_8Dragon()).playBlockBreakParticles(loc, m, players);
-		} else if (mode1_7_10) {
-			(new V1_7_10Dragon()).playBlockBreakParticles(loc, m, players);
-		}
-		(new V1_7Dragon()).playBlockBreakParticles(loc, m, players);
+	public static final void playBlockBreakParticles(final Location loc, final Material m, final Collection<? extends Player> collection) {
+		(new V1_8Dragon()).playBlockBreakParticles(loc, m, collection);
 	}
 
 	Scoreboard board;
@@ -2459,7 +2335,6 @@ public class Main extends JavaPlugin implements Listener {
 
 	public void openGUI(final Main m, String p) {
 		IconMenu iconm = new IconMenu("Shop", 18, new IconMenu.OptionClickEventHandler() {
-			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent event) {
 				String d = event.getName();
 				Player p = event.getPlayer();

@@ -1,10 +1,12 @@
-package com.comze_instancelabs.mobescape.V1_7;
+package com.comze_instancelabs.mobescape.V1_8;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 
-import net.minecraft.server.v1_7_R1.EntityTypes;
-import net.minecraft.server.v1_7_R1.PacketPlayOutWorldEvent;
+import net.minecraft.server.v1_8_R1.BlockPosition;
+import net.minecraft.server.v1_8_R1.EntityTypes;
+import net.minecraft.server.v1_8_R1.PacketPlayOutWorldEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,8 +14,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -21,16 +23,17 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import com.comze_instancelabs.mobescape.AbstractDragon;
 import com.comze_instancelabs.mobescape.Kits;
 import com.comze_instancelabs.mobescape.Main;
 import com.comze_instancelabs.mobescape.mobtools.Tools;
-import com.comze_instancelabs.mobescape.AbstractDragon;
 
-public class V1_7Dragon implements AbstractDragon {
+public class V1_8Dragon implements AbstractDragon {
 
 	public static HashMap<String, MEDragon> dragons = new HashMap<String, MEDragon>();
 
-	public static boolean registerEntities() {
+	
+	public static boolean registerEntities(){
 		try {
 			Class entityTypeClass = EntityTypes.class;
 
@@ -62,7 +65,8 @@ public class V1_7Dragon implements AbstractDragon {
 			ex.printStackTrace();
 			return false;
 		}
-
+		
+		
 		try {
 			Class entityTypeClass = EntityTypes.class;
 
@@ -97,32 +101,35 @@ public class V1_7Dragon implements AbstractDragon {
 			return false;
 		}
 	}
-
-	public void playBlockBreakParticles(final Location loc, final Material m, final Player... players) {
+	
+	public void playBlockBreakParticles(final Location loc, final Material m, final Collection<? extends Player>... collection) {
 		@SuppressWarnings("deprecation")
-		PacketPlayOutWorldEvent packet = new PacketPlayOutWorldEvent(2001, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), m.getId(), false);
-		for (final Player p : players) {
+		BlockPosition bp = new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+		PacketPlayOutWorldEvent packet = new PacketPlayOutWorldEvent(2001, bp, m.getId(), false);
+		for (final Collection<? extends Player> p : collection) {
 			((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 		}
 	}
-
+	
+	
 	public MEDragon spawnEnderdragon(Main m, String arena, Location t) {
-		/*
-		 * if(dragons.containsKey(arena)){ return dragons.get(arena); }
-		 */
+		/*if(dragons.containsKey(arena)){
+			return dragons.get(arena);
+		}*/
 		m.getLogger().info("DRAGON SPAWNED " + arena + " " + t.toString());
 		Object w = ((CraftWorld) t.getWorld()).getHandle();
-		if (m.getDragonWayPoints(arena) == null) {
+		if(m.getDragonWayPoints(arena) == null){
 			m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish.");
 			return null;
 		}
-		MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_7_R1.World) ((CraftWorld) t.getWorld()).getHandle(), m.getDragonWayPoints(arena));
-		((net.minecraft.server.v1_7_R1.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
+		MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_8_R1.World) ((CraftWorld) t.getWorld()).getHandle(), m.getDragonWayPoints(arena));
+		((net.minecraft.server.v1_8_R1.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
 		t_.setCustomName(m.dragon_name);
 
 		return t_;
 	}
-
+	
+	
 	public BukkitTask start(final Main m, final String arena) {
 		m.ingame.put(arena, true);
 		m.astarted.put(arena, false);
@@ -170,29 +177,29 @@ public class V1_7Dragon implements AbstractDragon {
 					}
 
 					m.astarted.put(arena, true);
-
+					
 					// update sign
-					Bukkit.getServer().getScheduler().runTask(m, new Runnable() {
-						public void run() {
+					Bukkit.getServer().getScheduler().runTask(m, new Runnable(){
+						public void run(){
 							Sign s = m.getSignFromArena(arena);
 							if (s != null) {
 								s.setLine(1, m.sign_second_ingame);
 								s.update();
-							}
+							}	
 						}
 					});
-
+					
 					for (final Player p : m.arenap.keySet()) {
-						if (m.arenap.get(p).equalsIgnoreCase(arena)) {
+						if(m.arenap.get(p).equalsIgnoreCase(arena)){
 							if (p.isOnline()) {
-								if (m.pkit.containsKey(p)) {
+								if(m.pkit.containsKey(p)){
 									String kit = m.pkit.get(p);
-
-									if (kit.equalsIgnoreCase("jumper")) {
+									
+									if(kit.equalsIgnoreCase("jumper")){
 										Kits.giveJumperKit(m, p);
-									} else if (kit.equalsIgnoreCase("warper")) {
+									}else if(kit.equalsIgnoreCase("warper")){
 										Kits.giveWarperKit(m, p);
-									} else if (kit.equalsIgnoreCase("tnt")) {
+									}else if(kit.equalsIgnoreCase("tnt")){
 										Kits.giveTNTKit(m, p);
 									}
 									m.pkit.remove(p);
@@ -200,57 +207,56 @@ public class V1_7Dragon implements AbstractDragon {
 							}
 						}
 					}
-
+					
 					Bukkit.getServer().getScheduler().cancelTask(m.countdown_id.get(arena));
 				}
 			}
 		}, 0, 20).getTaskId();
 		m.countdown_id.put(arena, t);
-
+		
 		Bukkit.getScheduler().runTask(m, new Runnable() {
 			public void run() {
-				try {
+				try{
 					boolean cont = true;
-					if (m.getDragonSpawn(arena) != null) {
-						for (Entity e : m.getNearbyEntities(m.getDragonSpawn(arena), 40)) {
-							if (e.getType() == EntityType.ENDER_DRAGON) {
+					if(m.getDragonSpawn(arena) != null){
+						for(Entity e : m.getNearbyEntities(m.getDragonSpawn(arena), 40)){
+							if(e.getType() == EntityType.ENDER_DRAGON){
 								cont = false;
 							}
 						}
 					}
-					if (cont) {
-						if (m.getDragonSpawn(arena) != null) {
+					if(cont){
+						if(m.getDragonSpawn(arena) != null){
 							dragons.put(arena, spawnEnderdragon(m, arena, m.getDragonSpawn(arena)));
-						} else {
+						}else{
 							dragons.put(arena, spawnEnderdragon(m, arena, m.getSpawn(arena)));
 						}
 					}
-				} catch (Exception e) {
+				}catch(Exception e){
 					m.stop(m.h.get(arena), arena);
 					return;
 				}
 			}
 		});
-
+		
 		final int d = 1;
-
+		
 		BukkitTask id__ = null;
 		id__ = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
-			@Override
 			public void run() {
 				try {
 					for (final Player p : m.arenap.keySet()) {
 						if (p.isOnline()) {
 							if (m.arenap.get(p).equalsIgnoreCase(arena)) {
 								m.arenap_.put(p.getName(), arena);
-
-								if (m.die_behind_mob) {
+								
+								if(m.die_behind_mob){
 									Vector vv = dragons.get(arena).getCurrentPosition();
 									Vector vv_ = dragons.get(arena).getCurrentPositionNext();
 									Location dragon = new Location(p.getWorld(), dragons.get(arena).locX, dragons.get(arena).locY, dragons.get(arena).locZ);
 									Location l = new Location(p.getWorld(), vv.getX(), vv.getY(), vv.getZ());
 									Location l_ = new Location(p.getWorld(), vv_.getX(), vv_.getY(), vv_.getZ());
-									if (p.getLocation().distance(l) - dragon.distance(l) > 10 && p.getLocation().distance(l_) - dragon.distance(l_) > 10) {
+									if(p.getLocation().distance(l) - dragon.distance(l) > 10 && p.getLocation().distance(l_) - dragon.distance(l_) > 10){
 										m.simulatePlayerFall(p);
 									}
 								}
@@ -282,31 +288,31 @@ public class V1_7Dragon implements AbstractDragon {
 						f_ = true;
 					}
 
-					if (!dragons.containsKey(arena)) {
+					if(!dragons.containsKey(arena)){
 						return;
 					}
-					if (dragons.get(arena) == null) {
+					if(dragons.get(arena) == null){
 						return;
 					}
-
+					
 					Vector v = dragons.get(arena).getNextPosition();
-					if (v != null && dragons.get(arena) != null) {
+					if(v != null && dragons.get(arena) != null){
 						dragons.get(arena).setPosition(v.getX(), v.getY(), v.getZ());
 					}
 
-					if (dragons.get(arena) == null) {
+					if(dragons.get(arena) == null){
 						return;
 					}
 
-					V1_7Dragon.destroyStatic(m, l1, l2, arena, length2);
-
+					V1_8Dragon.destroyStatic(m, l1, l2, arena, length2);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
-				Bukkit.getScheduler().runTask(m, new Runnable() {
-					public void run() {
-						// TODO reminder
+				
+				Bukkit.getScheduler().runTask(m, new Runnable(){
+					public void run(){
+						//TODO reminder
 						m.updateScoreboard(arena);
 					}
 				});
@@ -318,8 +324,8 @@ public class V1_7Dragon implements AbstractDragon {
 		m.tasks.put(arena, id__);
 		return id__;
 	}
-
-	public void removeEnderdragon(String arena) {
+	
+	public void removeEnderdragon(String arena){
 		try {
 			removeEnderdragon(dragons.get(arena));
 			dragons.put(arena, null);
@@ -327,19 +333,21 @@ public class V1_7Dragon implements AbstractDragon {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 	public void stop(final Main m, BukkitTask t, final String arena) {
 		Tools t_ = new Tools();
-		t_.stop(m, t, arena, false, false, "dragon");
+		t_.stop(m, t, arena, false, true, "dragon");
 	}
-
+	
+	
 	public void removeEnderdragon(MEDragon t) {
 		if (t != null) {
 			t.getBukkitEntity().remove();
 		}
 	}
-
-	public Block[] getLoc(Main m, final Location l, String arena, int i, int j, Location l2) {
+	
+	public Block[] getLoc(Main m, final Location l, String arena, int i, int j, Location l2){
 		Block[] b = new Block[4];
 		b[0] = l.getWorld().getBlockAt(new Location(l.getWorld(), dragons.get(arena).locX + (m.destroy_radius / 2) - i, dragons.get(arena).locY + j - 1, dragons.get(arena).locZ + 3));
 		b[1] = l.getWorld().getBlockAt(new Location(l.getWorld(), dragons.get(arena).locX + (m.destroy_radius / 2) - i, dragons.get(arena).locY + j - 1, dragons.get(arena).locZ - 3));
@@ -348,13 +356,13 @@ public class V1_7Dragon implements AbstractDragon {
 
 		return b;
 	}
-
-	public static void destroyStatic(final Main m, final Location l, final Location l2, String arena, int length2) {
-		Tools.destroy(m, l, l2, arena, length2, "dragon", false, false);
+	
+	public static void destroyStatic(final Main m, final Location l, final Location l2, String arena, int length2){
+		Tools.destroy(m, l, l2, arena, length2, "dragon", false, true);
 	}
 
-	public void destroy(final Main m, final Location l, final Location l2, String arena, int length2) {
-		Tools.destroy(m, l, l2, arena, length2, "dragon", false, false);
+	public void destroy(final Main m, final Location l, final Location l2, String arena, int length2){
+		Tools.destroy(m, l, l2, arena, length2, "dragon", false, true);
 	}
-
+	
 }
